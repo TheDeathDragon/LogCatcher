@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">LogCatcher</string>
+    <string name="log_auto_saving">Auto Saving</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="logger_catcher_settings">Logger Catcher Settings</string>
+    <string name="log_preferences">Logging Preferences</string>
+    <string name="log_keep_numbers">Max Log Keeping Days</string>
+    <string name="log_saving_location">Default Log Saving Location</string>
+    <string name="log_auto_saving_summary">Automatically save logs to storage</string>
+    <string name="log_level_title">Default Log Level</string>
+    <string name="log_format_title">Default Log Format</string>
+    <string name="log_buffer_title">Default Log Buffer</string>
+</resources>

@@ -9,10 +9,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.sunritel.logcatcher.R;
 import com.sunritel.logcatcher.service.LogSaveService;
@@ -21,8 +23,8 @@ import com.sunritel.logcatcher.utils.TagUtil;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private SwitchPreference log_auto_saving;
-    private Preference log_keep_days;
+    private SwitchPreferenceCompat log_auto_saving;
+    private EditTextPreference log_keep_days;
     private ListPreference log_saving_location;
     private ListPreference log_level;
     private ListPreference log_format;
@@ -50,8 +52,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onResume() {
+        super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(mActivity).registerOnSharedPreferenceChangeListener(this);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        PreferenceManager.getDefaultSharedPreferences(mActivity).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -64,7 +73,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 mIntent = new Intent(mActivity, LogSaveService.class);
             }
             if (isAutoSaving) {
-                mActivity.startActivity(mIntent);
+                mActivity.startService(mIntent);
             } else {
                 mActivity.stopService(mIntent);
             }
@@ -78,8 +87,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void init() {
-        log_auto_saving = (SwitchPreference) findPreference(PreferenceUtil.AUTOSAVE_KEY);
-        log_keep_days = (Preference) findPreference(PreferenceUtil.LOG_KEEP_DAYS_KEY);
+        log_auto_saving = (SwitchPreferenceCompat) findPreference(PreferenceUtil.AUTOSAVE_KEY);
+        log_keep_days = (EditTextPreference) findPreference(PreferenceUtil.LOG_KEEP_DAYS_KEY);
         log_saving_location = (ListPreference) findPreference(PreferenceUtil.LOG_SAVE_LOCATION_KEY);
         log_level = (ListPreference) findPreference(PreferenceUtil.LEVEL_KEY);
         log_format = (ListPreference) findPreference(PreferenceUtil.FORMAT_KEY);
@@ -90,5 +99,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         log_level.setOnPreferenceChangeListener(this);
         log_format.setOnPreferenceChangeListener(this);
         log_buffer.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
     }
 }

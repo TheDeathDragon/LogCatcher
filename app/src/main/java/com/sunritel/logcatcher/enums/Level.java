@@ -6,10 +6,12 @@ import android.graphics.Color;
 import com.sunritel.logcatcher.R;
 
 public enum Level {
-	V(0, "#121212", R.string.verbose_title), D(1, "#00006C",
-			R.string.debug_title), I(2, "#20831B", R.string.info_title), W(3,
-			"#FD7916", R.string.warn_title), E(4, "#FD0010",
-			R.string.error_title), F(5, "#ff0066", R.string.fatal_title);
+	V(0, "#121212", R.string.verbose_title),
+	D(1, "#00006C", R.string.debug_title),
+	I(2, "#20831B", R.string.info_title),
+	W(3, "#FD7916", R.string.warn_title),
+	E(4, "#FD0010", R.string.error_title),
+	F(5, "#ff0066", R.string.fatal_title);
 
 	private static final Level[] byOrder = new Level[6];
 

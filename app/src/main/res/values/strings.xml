@@ -10,4 +10,21 @@
     <string name="log_level_title">Default Log Level</string>
     <string name="log_format_title">Default Log Format</string>
     <string name="log_buffer_title">Default Log Buffer</string>
+    <string name="main_title">Main</string>
+    <string name="events_title">Events</string>
+    <string name="radio_title">Radio</string>
+    <string name="brief_title">Brief</string>
+    <string name="process_title">Process</string>
+    <string name="tag_title">Tag</string>
+    <string name="thread_title">Thread</string>
+    <string name="time_title">Time</string>
+    <string name="threadtime_title">Thread Time</string>
+    <string name="long_title">Long</string>
+    <string name="raw_title">Raw</string>
+    <string name="verbose_title">Verbose</string>
+    <string name="debug_title">Debug</string>
+    <string name="info_title">Information</string>
+    <string name="warn_title">Warning</string>
+    <string name="error_title">Error</string>
+    <string name="fatal_title">Fatal</string>
 </resources>

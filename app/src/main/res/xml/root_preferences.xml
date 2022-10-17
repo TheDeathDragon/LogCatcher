@@ -21,7 +21,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="Internal"
             app:dependency="log_auto_saving"
             app:entries="@array/log_saving_locations"
             app:entryValues="@array/log_saving_locations_values"
@@ -37,7 +37,7 @@
         app:title="@string/log_preferences">
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="V"
             app:dependency="log_auto_saving"
             app:entries="@array/log_level"
             app:entryValues="@array/log_level_values"
@@ -46,7 +46,7 @@
             app:title="@string/log_level_title"
             app:useSimpleSummaryProvider="true" />
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="BRIEF"
             app:dependency="log_auto_saving"
             app:entries="@array/log_format"
             app:entryValues="@array/log_format_values"
@@ -55,7 +55,7 @@
             app:title="@string/log_format_title"
             app:useSimpleSummaryProvider="true" />
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="MAIN"
             app:dependency="log_auto_saving"
             app:entries="@array/log_buffer"
             app:entryValues="@array/log_buffer_values"

@@ -5,8 +5,8 @@
         <item>External</item>
     </string-array>
     <string-array name="log_saving_locations_values">
-        <item>0</item>
-        <item>1</item>
+        <item>Internal</item>
+        <item>External</item>
     </string-array>
 
     <!-- Default Log Level -->
@@ -19,26 +19,12 @@
         <item>Fatal</item>
     </string-array>
     <string-array name="log_level_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-
-    <!-- Default Log Format -->
-    <string-array name="log_buffer">
-        <item>Main</item>
-        <item>Events</item>
-        <item>Radio</item>
-        <item>System</item>
-    </string-array>
-    <string-array name="log_buffer_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>V</item>
+        <item>D</item>
+        <item>I</item>
+        <item>W</item>
+        <item>E</item>
+        <item>F</item>
     </string-array>
 
     <!-- Default Log Buffer -->
@@ -52,13 +38,28 @@
         <item>Raw</item>
     </string-array>
     <string-array name="log_format_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
+        <item>BRIEF</item>
+        <item>PROCESS</item>
+        <item>TAG</item>
+        <item>THREAD</item>
+        <item>THREADTIME</item>
+        <item>TIME</item>
+        <item>LONG</item>
+        <item>RAW</item>
+    </string-array>
+
+    <!-- Default Log Format -->
+    <string-array name="log_buffer">
+        <item>Main</item>
+        <item>Events</item>
+        <item>Radio</item>
+        <item>System</item>
+    </string-array>
+    <string-array name="log_buffer_values">
+        <item>MAIN</item>
+        <item>EVENTS</item>
+        <item>RADIO</item>
+        <item>SYSTEM</item>
     </string-array>
 
 

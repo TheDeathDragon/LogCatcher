@@ -27,4 +27,6 @@
     <string name="warn_title">Warning</string>
     <string name="error_title">Error</string>
     <string name="fatal_title">Fatal</string>
+    <string name="default_title">Default</string>
+    <string name="log_max_size_per_file">Max Log Size (MB)</string>
 </resources>

@@ -2,7 +2,6 @@ package com.sunritel.logcatcher.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -10,17 +9,22 @@ import com.sunritel.logcatcher.enums.Buffer;
 import com.sunritel.logcatcher.enums.Format;
 import com.sunritel.logcatcher.enums.Level;
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 public class PreferenceUtil {
     public static final String AUTOSAVE_KEY = "log_auto_saving";
     public static final String LOG_KEEP_DAYS_KEY = "log_keep_days";
+    public static final String LOG_MAX_SIZE_PER_FILE = "log_max_size_per_file";
     public static final String LOG_SAVE_LOCATION_KEY = "log_saving_location";
     public static final String LEVEL_KEY = "log_level";
     public static final String FORMAT_KEY = "log_format";
     public static final String BUFFER_KEY = "log_buffer";
-    public static final String FILTER_PATTERN_KEY = "filterPattern";
+
+    public static final String DEFAULT_VALUE = "DEFAULT";
+    public static final String DEFAULT_LOG_KEEP_DAYS = "7";
+    public static final String DEFAULT_LOG_MAX_SIZE = "300";
+    public static final String DEFAULT_LOG_DIR = "oem_log";
+
+    public static final String LOG_SAVE_LOCATION_INTERNAL = "Internal";
+    public static final String LOG_SAVE_LOCATION_EXTERNAL = "External";
 
 
     private final SharedPreferences sharedPrefs;
@@ -58,15 +62,23 @@ public class PreferenceUtil {
     }
 
     public int getLogKeepDays() {
-        return Integer.parseInt(getString(LOG_KEEP_DAYS_KEY, "7"));
+        return Integer.parseInt(getString(LOG_KEEP_DAYS_KEY, DEFAULT_LOG_KEEP_DAYS));
     }
 
     public void setLogKeepDays(int days) {
         setString(LOG_KEEP_DAYS_KEY, String.valueOf(days));
     }
 
+    public int getLogMaxSize() {
+        return Integer.parseInt(getString(LOG_MAX_SIZE_PER_FILE, DEFAULT_LOG_MAX_SIZE));
+    }
+
+    public void setLogMaxSize(int size) {
+        setString(LOG_MAX_SIZE_PER_FILE, String.valueOf(size));
+    }
+
     public String getLogSaveLocation() {
-        return getString(LOG_SAVE_LOCATION_KEY, "oem_log");
+        return getString(LOG_SAVE_LOCATION_KEY, DEFAULT_LOG_DIR);
     }
 
     public void setLogSaveLocation(String location) {
@@ -74,7 +86,7 @@ public class PreferenceUtil {
     }
 
     public Level getLevel() {
-        return Level.valueOf(getString(LEVEL_KEY, "V"));
+        return Level.valueOf(getString(LEVEL_KEY, DEFAULT_VALUE));
     }
 
     public void setLevel(Level level) {
@@ -82,12 +94,7 @@ public class PreferenceUtil {
     }
 
     public Format getFormat() {
-        String f = getString(FORMAT_KEY, "BRIEF");
-        if (!f.equals(f.toUpperCase())) {
-            f = f.toUpperCase();
-            setString(FORMAT_KEY, f);
-        }
-        return Format.valueOf(f);
+        return Format.valueOf(getString(FORMAT_KEY, DEFAULT_VALUE));
     }
 
     public void setFormat(Format format) {
@@ -95,45 +102,11 @@ public class PreferenceUtil {
     }
 
     public Buffer getBuffer() {
-        return Buffer.valueOf(getString(BUFFER_KEY, "MAIN"));
+        return Buffer.valueOf(getString(BUFFER_KEY, DEFAULT_VALUE));
     }
 
     public void setBuffer(Buffer buffer) {
         setString(BUFFER_KEY, buffer.toString());
-    }
-
-    public String getFilter() {
-        return getString("filter", null);
-    }
-
-    public Pattern getFilterPattern() {
-        if (!isFilterPattern()) {
-            return null;
-        }
-
-        String p = getString("filter", null);
-        if (p == null) {
-            return null;
-        }
-        try {
-            return Pattern.compile(p, Pattern.CASE_INSENSITIVE);
-        } catch (PatternSyntaxException e) {
-            setString("filter", null);
-            Log.w(TagUtil.TAG, "PreferenceUtil --> invalid filter pattern found, cleared");
-            return null;
-        }
-    }
-
-    public void setFilter(String filter) {
-        setString("filter", filter);
-    }
-
-    public boolean isFilterPattern() {
-        return getBoolean(FILTER_PATTERN_KEY);
-    }
-
-    public void setFilterPattern(boolean filterPattern) {
-        setBoolean(FILTER_PATTERN_KEY, filterPattern);
     }
 
 }

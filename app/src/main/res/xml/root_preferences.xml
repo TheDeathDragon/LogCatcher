@@ -14,15 +14,20 @@
 
         <EditTextPreference
             app:defaultValue="7"
-            app:dependency="log_auto_saving"
             app:iconSpaceReserved="false"
             app:key="log_keep_days"
             app:title="@string/log_keep_numbers"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:defaultValue="300"
+            app:iconSpaceReserved="false"
+            app:key="log_max_size_per_file"
+            app:title="@string/log_max_size_per_file"
+            app:useSimpleSummaryProvider="true" />
+
         <ListPreference
             android:defaultValue="Internal"
-            app:dependency="log_auto_saving"
             app:entries="@array/log_saving_locations"
             app:entryValues="@array/log_saving_locations_values"
             app:iconSpaceReserved="false"
@@ -37,8 +42,7 @@
         app:title="@string/log_preferences">
 
         <ListPreference
-            android:defaultValue="V"
-            app:dependency="log_auto_saving"
+            android:defaultValue="DEFAULT"
             app:entries="@array/log_level"
             app:entryValues="@array/log_level_values"
             app:iconSpaceReserved="false"
@@ -46,8 +50,7 @@
             app:title="@string/log_level_title"
             app:useSimpleSummaryProvider="true" />
         <ListPreference
-            android:defaultValue="BRIEF"
-            app:dependency="log_auto_saving"
+            android:defaultValue="DEFAULT"
             app:entries="@array/log_format"
             app:entryValues="@array/log_format_values"
             app:iconSpaceReserved="false"
@@ -55,8 +58,7 @@
             app:title="@string/log_format_title"
             app:useSimpleSummaryProvider="true" />
         <ListPreference
-            android:defaultValue="MAIN"
-            app:dependency="log_auto_saving"
+            android:defaultValue="DEFAULT"
             app:entries="@array/log_buffer"
             app:entryValues="@array/log_buffer_values"
             app:iconSpaceReserved="false"

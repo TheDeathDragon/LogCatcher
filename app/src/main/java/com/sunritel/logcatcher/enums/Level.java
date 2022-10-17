@@ -1,58 +1,31 @@
 package com.sunritel.logcatcher.enums;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.sunritel.logcatcher.R;
 
 public enum Level {
-	V(0, "#121212", R.string.verbose_title),
-	D(1, "#00006C", R.string.debug_title),
-	I(2, "#20831B", R.string.info_title),
-	W(3, "#FD7916", R.string.warn_title),
-	E(4, "#FD0010", R.string.error_title),
-	F(5, "#ff0066", R.string.fatal_title);
+    DEFAULT("default", R.string.default_title),
+    VERBOSE("V", R.string.verbose_title),
+    DEBUG("D", R.string.debug_title),
+    INFO("I", R.string.info_title),
+    WARN("W", R.string.warn_title),
+    ERROR("E", R.string.error_title),
+    FATAL("F", R.string.fatal_title);
 
-	private static final Level[] byOrder = new Level[6];
+    private final String mValue;
+    private final int mTitleId;
 
-	static {
-		byOrder[0] = V;
-		byOrder[1] = D;
-		byOrder[2] = I;
-		byOrder[3] = W;
-		byOrder[4] = E;
-		byOrder[5] = F;
-	}
+    Level(String value, int titleId) {
+        mValue = value;
+        mTitleId = titleId;
+    }
 
-	private final String mHexColor;
-	private final int mColor;
-	private final int mValue;
-	private final int mTitleId;
+    public String getValue() {
+        return mValue;
+    }
 
-	Level(int value, String hexColor, int titleId) {
-		mValue = value;
-		mHexColor = hexColor;
-		mColor = Color.parseColor(hexColor);
-		mTitleId = titleId;
-	}
-
-	public String getHexColor() {
-		return mHexColor;
-	}
-	
-	public int getColor() {
-		return mColor;
-	}
-
-	public int getValue() {
-		return mValue;
-	}
-
-	public static Level getByOrder(int value) {
-		return byOrder[value];
-	}
-
-	public String getTitle(Context context) {
-		return context.getResources().getString(mTitleId);
-	}
+    public String getTitle(Context context) {
+        return context.getResources().getString(mTitleId);
+    }
 }

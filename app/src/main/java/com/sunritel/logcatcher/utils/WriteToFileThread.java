@@ -14,12 +14,14 @@ public class WriteToFileThread extends Thread {
 
     private final File file;
     private final InputStream is;
+    private final int maxFileSize;
     private boolean isStop;
     private OnLogListener mOnLogListener;
 
-    public WriteToFileThread(InputStream is, File file) {
+    public WriteToFileThread(InputStream is, File file, int maxFileSize) {
         this.is = is;
         this.file = file;
+        this.maxFileSize = maxFileSize;
     }
 
     public void setOnReadLineListener(OnLogListener logListener) {
@@ -29,17 +31,27 @@ public class WriteToFileThread extends Thread {
     @Override
     public void run() {
         super.run();
+        Log.d(TagUtil.TAG, "WriteToFileThread --> run");
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file), 1024);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = br.readLine()) != null) {
+                if (file.length() > 1024L * 1024 * maxFileSize) {
+                    Log.d(TagUtil.TAG, "WriteToFileThread --> file size is more than " + maxFileSize + "M , stop logging");
+                    isStop = true;
+                    bw.flush();
+                    bw.close();
+                    br.close();
+                    is.close();
+                    break;
+                }
                 bw.write(line + "\n");
                 if (mOnLogListener != null) {
                     mOnLogListener.readLine(line);
                 }
                 if (isStop) {
-                    Log.d(TagUtil.TAG, "WriteToFileThread --> break this thread");
+                    Log.d(TagUtil.TAG, "WriteToFileThread --> terminated");
                     bw.flush();
                     bw.close();
                     br.close();
@@ -53,6 +65,7 @@ public class WriteToFileThread extends Thread {
     }
 
     public void stopSelf(boolean isStop) {
+        Log.d(TagUtil.TAG, "WriteToFileThread --> stopSelf : " + isStop);
         this.isStop = isStop;
     }
 

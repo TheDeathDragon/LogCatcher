@@ -3,7 +3,6 @@ package com.sunritel.logcatcher.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
 
@@ -22,7 +21,6 @@ public class BootReceiver extends BroadcastReceiver {
             Log.d(MUtil.TAG, "BootReceiver --> onReceive: " + intent.getAction());
             Context mAppContext = LogCatcherApplication.getContext();
             PreferenceUtil mPreferenceUtil = new PreferenceUtil(mAppContext);
-            mAppContext.registerReceiver(new DateChangeReceiver(), new IntentFilter(Intent.ACTION_DATE_CHANGED));
             if (!"user".equals(type) && mPreferenceUtil.getAutoSaving()) {
                 Intent mServiceIntent = LogCatcherApplication.getLogSavingServiceIntent();
                 mAppContext.startService(mServiceIntent);

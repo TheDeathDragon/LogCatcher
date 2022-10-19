@@ -13,13 +13,12 @@ import com.sunritel.logcatcher.LogCatcherApplication;
 import com.sunritel.logcatcher.utils.LogEngine;
 import com.sunritel.logcatcher.utils.MUtil;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class LogSavingService extends Service {
 
-    private ScheduledExecutorService mService;
+    private ExecutorService mService;
     private LogEngine mLogEngine;
     private static boolean isRunning = false;
     private Context mAppContext;
@@ -34,9 +33,8 @@ public class LogSavingService extends Service {
             mLogEngine = new LogEngine(mAppContext);
             mLogEngine.start();
         };
-        // TODO 定时任务
-        mService = Executors.newSingleThreadScheduledExecutor();
-        mService.scheduleAtFixedRate(runnable, 0, 24, TimeUnit.HOURS);
+        mService = Executors.newSingleThreadExecutor();
+        mService.execute(runnable);
         isRunning = true;
         Log.d(MUtil.TAG, "LogSavingService --> onStartCommand");
         return super.onStartCommand(intent, flags, startId);

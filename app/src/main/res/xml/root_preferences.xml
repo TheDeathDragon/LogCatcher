@@ -27,7 +27,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            android:defaultValue="Internal"
+            android:defaultValue="EXTERNAL"
             app:entries="@array/log_saving_locations"
             app:entryValues="@array/log_saving_locations_values"
             app:iconSpaceReserved="false"

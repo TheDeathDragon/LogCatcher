@@ -2,23 +2,27 @@ package com.sunritel.logcatcher.service;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.sunritel.logcatcher.LogCatcherApplication;
 import com.sunritel.logcatcher.utils.LogEngine;
-import com.sunritel.logcatcher.utils.TagUtil;
+import com.sunritel.logcatcher.utils.MUtil;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class LogSaveService extends Service {
+public class LogSavingService extends Service {
 
     private ScheduledExecutorService mService;
     private LogEngine mLogEngine;
+    private static boolean isRunning = false;
+    private Context mAppContext;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -26,19 +30,22 @@ public class LogSaveService extends Service {
             if (mLogEngine != null) {
                 mLogEngine.stop();
             }
-            mLogEngine = new LogEngine(LogSaveService.this);
+            mAppContext = LogCatcherApplication.getContext();
+            mLogEngine = new LogEngine(mAppContext);
             mLogEngine.start();
         };
+        // TODO 定时任务
         mService = Executors.newSingleThreadScheduledExecutor();
         mService.scheduleAtFixedRate(runnable, 0, 24, TimeUnit.HOURS);
-        Log.d(TagUtil.TAG, "LogSaveService --> onStartCommand");
+        isRunning = true;
+        Log.d(MUtil.TAG, "LogSavingService --> onStartCommand");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable
     @Override
     public ComponentName startService(Intent service) {
-        Log.d(TagUtil.TAG, "LogSaveService --> startService");
+        Log.d(MUtil.TAG, "LogSavingService --> startService");
         return super.startService(service);
     }
 
@@ -47,22 +54,26 @@ public class LogSaveService extends Service {
         if (mLogEngine != null) {
             mLogEngine = null;
         }
-        Log.d(TagUtil.TAG, "LogSaveService --> stopService");
+        Log.d(MUtil.TAG, "LogSavingService --> stopService");
         return super.stopService(name);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TagUtil.TAG, "LogSaveService --> onBind");
+        Log.d(MUtil.TAG, "LogSavingService --> onBind");
         return null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TagUtil.TAG, "LogSaveService --> onDestroy");
-        // 不可以再submit新的task,已经submit的将继续执行
+        Log.d(MUtil.TAG, "LogSavingService --> onDestroy");
         mLogEngine.stop();
+        isRunning = false;
         mService.shutdown();
+    }
+
+    public static boolean isRunning() {
+        return isRunning;
     }
 }

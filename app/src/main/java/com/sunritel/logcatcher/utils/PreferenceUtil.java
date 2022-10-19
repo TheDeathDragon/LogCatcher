@@ -21,10 +21,7 @@ public class PreferenceUtil {
     public static final String DEFAULT_VALUE = "DEFAULT";
     public static final String DEFAULT_LOG_KEEP_DAYS = "7";
     public static final String DEFAULT_LOG_MAX_SIZE = "300";
-    public static final String DEFAULT_LOG_DIR = "oem_log";
-
-    public static final String LOG_SAVE_LOCATION_INTERNAL = "Internal";
-    public static final String LOG_SAVE_LOCATION_EXTERNAL = "External";
+    public static final String DEFAULT_LOG_LOCATION = "EXTERNAL";
 
 
     private final SharedPreferences sharedPrefs;
@@ -44,7 +41,7 @@ public class PreferenceUtil {
     }
 
     private boolean getBoolean(String key) {
-        return sharedPrefs.getBoolean(key, false);
+        return sharedPrefs.getBoolean(key, true);
     }
 
     private void setBoolean(String key, boolean val) {
@@ -78,7 +75,7 @@ public class PreferenceUtil {
     }
 
     public String getLogSaveLocation() {
-        return getString(LOG_SAVE_LOCATION_KEY, DEFAULT_LOG_DIR);
+        return getString(LOG_SAVE_LOCATION_KEY, DEFAULT_LOG_LOCATION);
     }
 
     public void setLogSaveLocation(String location) {

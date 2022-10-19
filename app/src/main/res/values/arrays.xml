@@ -5,8 +5,8 @@
         <item>External</item>
     </string-array>
     <string-array name="log_saving_locations_values">
-        <item>Internal</item>
-        <item>External</item>
+        <item>INTERNAL</item>
+        <item>EXTERNAL</item>
     </string-array>
 
     <!-- Default Log Level -->

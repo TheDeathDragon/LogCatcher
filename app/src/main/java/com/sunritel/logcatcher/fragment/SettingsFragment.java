@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +17,11 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.sunritel.logcatcher.LogCatcherApplication;
 import com.sunritel.logcatcher.R;
-import com.sunritel.logcatcher.service.LogSaveService;
+import com.sunritel.logcatcher.service.LogSavingService;
+import com.sunritel.logcatcher.utils.MUtil;
 import com.sunritel.logcatcher.utils.PreferenceUtil;
-import com.sunritel.logcatcher.utils.TagUtil;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -33,18 +35,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private PreferenceUtil mPreferenceUtil;
     private Intent mLogSaveServiceIntent;
     public Activity mActivity;
+    private Context mAppContext;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
-        Log.d(TagUtil.TAG, "SettingsFragment --> onAttach");
+        Log.d(MUtil.TAG, "SettingsFragment --> onAttach");
+        Toast.makeText(mActivity, "Please stop the service before changing the settings", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
-        Log.d(TagUtil.TAG, "SettingsFragment --> onCreatePreferences");
+        Log.d(MUtil.TAG, "SettingsFragment --> onCreatePreferences");
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         mPreferenceUtil = new PreferenceUtil(mActivity);
         init();
         setEnabled(!mPreferenceUtil.getAutoSaving());
-        Log.d(TagUtil.TAG, "SettingsFragment --> onCreate");
+        Log.d(MUtil.TAG, "SettingsFragment --> onCreate");
     }
 
     @Override
@@ -61,30 +65,37 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         super.onResume();
         setEnabled(!mPreferenceUtil.getAutoSaving());
         PreferenceManager.getDefaultSharedPreferences(mActivity).registerOnSharedPreferenceChangeListener(this);
-        Log.d(TagUtil.TAG, "SettingsFragment --> onResume : getAutoSaving : " + mPreferenceUtil.getAutoSaving());
+        Log.d(MUtil.TAG, "SettingsFragment --> onResume : getAutoSaving : " + mPreferenceUtil.getAutoSaving());
     }
 
     @Override
     public void onPause() {
         super.onPause();
         PreferenceManager.getDefaultSharedPreferences(mActivity).unregisterOnSharedPreferenceChangeListener(this);
-        Log.d(TagUtil.TAG, "SettingsFragment --> onPause : getAutoSaving : " + mPreferenceUtil.getAutoSaving());
+        Log.d(MUtil.TAG, "SettingsFragment --> onPause : getAutoSaving : " + mPreferenceUtil.getAutoSaving());
     }
 
     @Override
     public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
 
+        mAppContext = LogCatcherApplication.getContext();
+        mLogSaveServiceIntent = LogCatcherApplication.getLogSavingServiceIntent();
+
         if (log_auto_saving.equals(preference)) {
             Boolean isAutoSaving = (Boolean) newValue;
-            Log.d(TagUtil.TAG, "onPreferenceChange --> isAutoSaving :" + isAutoSaving);
-            if (mLogSaveServiceIntent == null) {
-                mLogSaveServiceIntent = new Intent(mActivity, LogSaveService.class);
+            Log.d(MUtil.TAG, "onPreferenceChange --> isAutoSaving :" + isAutoSaving);
+            Log.d(MUtil.TAG, "LogSavingService.isRunning: " + LogSavingService.isRunning());
+            if (LogSavingService.isRunning()) {
+                Log.d(MUtil.TAG, "LogSavingService.isRunning --> stopService");
+                mAppContext.stopService(mLogSaveServiceIntent);
+                mLogSaveServiceIntent = null;
             }
             if (isAutoSaving) {
-                mActivity.startService(mLogSaveServiceIntent);
+                Log.d(MUtil.TAG, "isAutoSaving --> startService");
+                mLogSaveServiceIntent = new Intent(mAppContext, LogSavingService.class);
+                mAppContext.startService(mLogSaveServiceIntent);
                 setEnabled(false);
             } else {
-                mActivity.stopService(mLogSaveServiceIntent);
                 setEnabled(true);
             }
         } else if (log_keep_days.equals(preference)) {
@@ -98,13 +109,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void init() {
-        log_auto_saving = (SwitchPreferenceCompat) findPreference(PreferenceUtil.AUTOSAVE_KEY);
-        log_keep_days = (EditTextPreference) findPreference(PreferenceUtil.LOG_KEEP_DAYS_KEY);
-        log_max_size_per_file = (EditTextPreference) findPreference(PreferenceUtil.LOG_MAX_SIZE_PER_FILE);
-        log_saving_location = (ListPreference) findPreference(PreferenceUtil.LOG_SAVE_LOCATION_KEY);
-        log_level = (ListPreference) findPreference(PreferenceUtil.LEVEL_KEY);
-        log_format = (ListPreference) findPreference(PreferenceUtil.FORMAT_KEY);
-        log_buffer = (ListPreference) findPreference(PreferenceUtil.BUFFER_KEY);
+        log_auto_saving = findPreference(PreferenceUtil.AUTOSAVE_KEY);
+        log_keep_days = findPreference(PreferenceUtil.LOG_KEEP_DAYS_KEY);
+        log_max_size_per_file = findPreference(PreferenceUtil.LOG_MAX_SIZE_PER_FILE);
+        log_saving_location = findPreference(PreferenceUtil.LOG_SAVE_LOCATION_KEY);
+        log_level = findPreference(PreferenceUtil.LEVEL_KEY);
+        log_format = findPreference(PreferenceUtil.FORMAT_KEY);
+        log_buffer = findPreference(PreferenceUtil.BUFFER_KEY);
         log_auto_saving.setOnPreferenceChangeListener(this);
         log_keep_days.setOnPreferenceChangeListener(this);
         log_max_size_per_file.setOnPreferenceChangeListener(this);
@@ -120,10 +131,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void setEnabled(boolean enabled) {
-        Log.d(TagUtil.TAG, "SettingsFragment --> setEnabled : " + enabled);
+        Log.d(MUtil.TAG, "SettingsFragment --> setEnabled : " + enabled);
         log_keep_days.setEnabled(enabled);
         log_max_size_per_file.setEnabled(enabled);
-        log_saving_location.setEnabled(enabled);
+        log_saving_location.setEnabled(false);
         log_level.setEnabled(enabled);
         log_format.setEnabled(enabled);
         log_buffer.setEnabled(enabled);

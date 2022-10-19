@@ -31,14 +31,14 @@ public class WriteToFileThread extends Thread {
     @Override
     public void run() {
         super.run();
-        Log.d(TagUtil.TAG, "WriteToFileThread --> run");
+        Log.d(MUtil.TAG, "WriteToFileThread --> run");
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file), 1024);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file,true), 1024);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = br.readLine()) != null) {
                 if (file.length() > 1024L * 1024 * maxFileSize) {
-                    Log.d(TagUtil.TAG, "WriteToFileThread --> file size is more than " + maxFileSize + "M , stop logging");
+                    Log.d(MUtil.TAG, "WriteToFileThread --> file size is more than " + maxFileSize + "M , stop logging");
                     isStop = true;
                     bw.flush();
                     bw.close();
@@ -51,7 +51,7 @@ public class WriteToFileThread extends Thread {
                     mOnLogListener.readLine(line);
                 }
                 if (isStop) {
-                    Log.d(TagUtil.TAG, "WriteToFileThread --> terminated");
+                    Log.d(MUtil.TAG, "WriteToFileThread --> terminated");
                     bw.flush();
                     bw.close();
                     br.close();
@@ -60,12 +60,12 @@ public class WriteToFileThread extends Thread {
                 }
             }
         } catch (IOException e) {
-            Log.e(TagUtil.TAG, "WriteToFileThread --> readLine error", e);
+            Log.e(MUtil.TAG, "WriteToFileThread --> readLine error", e);
         }
     }
 
     public void stopSelf(boolean isStop) {
-        Log.d(TagUtil.TAG, "WriteToFileThread --> stopSelf : " + isStop);
+        Log.d(MUtil.TAG, "WriteToFileThread --> stopSelf : " + isStop);
         this.isStop = isStop;
     }
 

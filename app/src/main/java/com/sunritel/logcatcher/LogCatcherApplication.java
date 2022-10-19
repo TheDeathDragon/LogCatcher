@@ -12,10 +12,6 @@ public class LogCatcherApplication extends Application {
     private static Application mLogCatcherApplication;
     private static Intent mLogSavingServiceIntent;
 
-//    public static Application getLogCatcherApplication() {
-//        return mLogCatcherApplication;
-//    }
-
     public static Context getContext() {
         return mLogCatcherApplication.getApplicationContext();
     }
@@ -30,7 +26,6 @@ public class LogCatcherApplication extends Application {
         mLogCatcherApplication = this;
         mLogSavingServiceIntent = new Intent(this, LogSavingService.class);
     }
-
 
 
 }

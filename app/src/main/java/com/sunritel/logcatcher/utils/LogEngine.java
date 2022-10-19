@@ -10,16 +10,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class LogEngine {
 
     private final PreferenceUtil mPrefs;
-    //    private final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
     private final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private static File mRootPath;
     private WriteToFileThread mThread;
@@ -49,8 +46,7 @@ public class LogEngine {
 
     public void start() {
         try {
-            // TODO 检查日志是否过期
-//            checkLogIsExpire();
+            checkLogIsExpire();
             List<String> commandList = new ArrayList<>();
             commandList.add("logcat");
             if (!mPrefs.getFormat().getValue().equals(DEFAULT_VALUE)) {
@@ -76,7 +72,6 @@ public class LogEngine {
 
             Log.d(MUtil.TAG, "LogEngine --> LogEngine is start");
             Log.d(MUtil.TAG, "LogEngine --> maxLogFileSize : " + mPrefs.getLogMaxSize() + "M");
-            // TODO 日志存储为单文件
             mThread = new WriteToFileThread(process.getInputStream(), file, mPrefs.getLogMaxSize());
             mThread.stopSelf(false);
             mThread.start();
@@ -89,31 +84,28 @@ public class LogEngine {
         Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire");
         File[] files = mRootPath.listFiles();
         if (files == null) {
+            Log.d(MUtil.TAG, "checkLogIsExpire: there is no log file in " + mRootPath.getAbsolutePath());
             return;
         }
         for (File f : files) {
             try {
-                Calendar calendar = Calendar.getInstance();
-                String fileName = f.getName().subSequence(0, f.getName().indexOf(".")).toString();
-                calendar.setTime(Objects.requireNonNull(dataFormat.parse(fileName)));
-                long timeInMillis1 = calendar.getTimeInMillis();
-                // 写文件的时间
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, -mPrefs.getLogKeepDays());
-                Log.d(MUtil.TAG, "LogEngine --> getLogKeepDays : " + (-mPrefs.getLogKeepDays()));
-                // 七天前的时间
-                long timeInMillis2 = cal.getTimeInMillis();
+                Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> file name : " + f.getName());
+                Date fileLastModified = dataFormat.parse(f.getName().substring(mLogFileNamePrefix.length(), mLogFileNamePrefix.length() + 10));
+                Date now = new Date();
+                assert fileLastModified != null;
+                int daysBetween = now.getTime() - fileLastModified.getTime() > 0 ? (int) ((now.getTime() - fileLastModified.getTime()) / (1000 * 3600 * 24)) : 0;
 
-                // 文件超过七天,删除文件
-                if ((timeInMillis2 - timeInMillis1) > 0) {
-                    Log.d(MUtil.TAG, "LogEngine --> delete file : " + f.getName());
+                Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> fileLastModified : " + fileLastModified);
+                Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> daysBetween : " + daysBetween);
+
+                if ((daysBetween) > mPrefs.getLogKeepDays()) {
+                    Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> log keep days reach " + mPrefs.getLogKeepDays() + " days, delete log file");
                     result = f.delete();
-                    Log.d(MUtil.TAG, "LogEngine --> delete file result : " + result);
+                    Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> delete file : " + f.getName() + " result : " + result);
                 }
-                Log.d(MUtil.TAG, "LogEngine --> timeInMillis1 : " + timeInMillis1 + " timeInMillis2 : " + timeInMillis2 + " timeOffset : " + ((timeInMillis2 - timeInMillis1)));
             } catch (ParseException e) {
                 e.printStackTrace();
-                Log.d(MUtil.TAG, "LogEngine --> delete file error : " + e.getMessage());
+                Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> error in checkLogIsExpire : " + e.getMessage());
             }
         }
     }

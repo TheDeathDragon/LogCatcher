@@ -21,7 +21,8 @@ public class BootReceiver extends BroadcastReceiver {
             Log.d(MUtil.TAG, "BootReceiver --> onReceive: " + intent.getAction());
             Context mAppContext = LogCatcherApplication.getContext();
             PreferenceUtil mPreferenceUtil = new PreferenceUtil(mAppContext);
-            if (!"user".equals(type) && mPreferenceUtil.getAutoSaving()) {
+//            if (!"user".equals(type) && mPreferenceUtil.getAutoSaving()) {
+            if (mPreferenceUtil.getAutoSaving()) {
                 Intent mServiceIntent = LogCatcherApplication.getLogSavingServiceIntent();
                 mAppContext.startService(mServiceIntent);
             } else {

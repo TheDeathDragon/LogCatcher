@@ -98,7 +98,7 @@ public class LogEngine {
                 Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> fileLastModified : " + fileLastModified);
                 Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> daysBetween : " + daysBetween);
 
-                if ((daysBetween) > mPrefs.getLogKeepDays()) {
+                if ((daysBetween) >= mPrefs.getLogKeepDays()) {
                     Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> log keep days reach " + mPrefs.getLogKeepDays() + " days, delete log file");
                     result = f.delete();
                     Log.d(MUtil.TAG, "LogEngine --> checkLogIsExpire --> delete file : " + f.getName() + " result : " + result);

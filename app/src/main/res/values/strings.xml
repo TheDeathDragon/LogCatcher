@@ -10,23 +10,26 @@
     <string name="log_level_title">Default Log Level</string>
     <string name="log_format_title">Default Log Format</string>
     <string name="log_buffer_title">Default Log Buffer</string>
-    <string name="main_title">Main</string>
-    <string name="events_title">Events</string>
-    <string name="radio_title">Radio</string>
-    <string name="brief_title">Brief</string>
-    <string name="process_title">Process</string>
-    <string name="tag_title">Tag</string>
-    <string name="thread_title">Thread</string>
-    <string name="time_title">Time</string>
-    <string name="threadtime_title">Thread Time</string>
-    <string name="long_title">Long</string>
-    <string name="raw_title">Raw</string>
-    <string name="verbose_title">Verbose</string>
-    <string name="debug_title">Debug</string>
-    <string name="info_title">Information</string>
-    <string name="warn_title">Warning</string>
-    <string name="error_title">Error</string>
-    <string name="fatal_title">Fatal</string>
+    <string name="main_title" translatable="false">Main</string>
+    <string name="events_title" translatable="false">Events</string>
+    <string name="radio_title" translatable="false">Radio</string>
+    <string name="brief_title" translatable="false">Brief</string>
+    <string name="process_title" translatable="false">Process</string>
+    <string name="tag_title" translatable="false">Tag</string>
+    <string name="thread_title" translatable="false">Thread</string>
+    <string name="time_title" translatable="false">Time</string>
+    <string name="thread_time_title" translatable="false">Thread Time</string>
+    <string name="long_title" translatable="false">Long</string>
+    <string name="raw_title" translatable="false">Raw</string>
+    <string name="verbose_title" translatable="false">Verbose</string>
+    <string name="debug_title" translatable="false">Debug</string>
+    <string name="info_title" translatable="false">Information</string>
+    <string name="warn_title" translatable="false">Warning</string>
+    <string name="error_title" translatable="false">Error</string>
+    <string name="fatal_title" translatable="false">Fatal</string>
     <string name="default_title">Default</string>
     <string name="log_max_size_per_file">Max Log Size (MB)</string>
+    <string name="system_title">System</string>
+    <string name="crash_title">Crash</string>
+    <string name="all_title">All</string>
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">日志服务</string>
+    <string name="log_auto_saving">启用日志存储服务</string>
+    <string name="title_activity_settings">日志服务设置</string>
+    <string name="logger_catcher_settings">日志服务设置</string>
+    <string name="log_preferences">日志服务详细设置</string>
+    <string name="log_keep_numbers">日志保留天数</string>
+    <string name="log_saving_location">默认日志存储位置</string>
+    <string name="log_auto_saving_summary">日志将会自动被存储到文件</string>
+    <string name="log_level_title">默认日志等级</string>
+    <string name="log_format_title">默认日志格式</string>
+    <string name="log_buffer_title">默认日志缓存类别</string>
+    <string name="default_title">默认</string>
+    <string name="log_max_size_per_file">最大日志文件大小（MB）</string>
+</resources>

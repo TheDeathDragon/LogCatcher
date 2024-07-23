@@ -1,5 +1,13 @@
 # LogCatcher
 
+客户需求，需要自动抓取 Log 存放到 `/sdcard/oem_log` 中
+
+并且只保留 7 天
+
+每天的日志单个文件最大 `300M` 
+
+超过则停止记录
+
 ### Logcatcher
 
 ```mermaid
